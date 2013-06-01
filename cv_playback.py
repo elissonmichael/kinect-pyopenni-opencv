@@ -13,7 +13,7 @@ video = ni.find_existing_node(NODE_TYPE_IMAGE)
 tecla = -1
 while (tecla < 0):
     ni.wait_one_update_all(video)
-    imagem = video.get_raw_image_map()
+    imagem = video.get_raw_image_map_bgr()
     cv.SetData(imagem_cv, imagem)
     cv.ShowImage("video", imagem_cv)
 
