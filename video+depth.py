@@ -2,6 +2,10 @@
 from openni import *
 import cv2.cv as cv
 
+cv.NamedWindow('Video',1)
+cv.NamedWindow('Profundidade',1)
+cv.MoveWindow('Profundidade',650,0)
+
 depth_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 1)
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 
@@ -21,10 +25,12 @@ ctx.start_generating_all()
 
 def processa_video(imagem):
     cv.SetData(imagem_cv, imagem)
+    cv.Flip(imagem_cv,imagem_cv,1)
     cv.ShowImage('Video', imagem_cv)
 
 def processa_profundidade(imagem):
     cv.SetData(depth_cv, imagem)
+    cv.Flip(depth_cv,depth_cv,1)
     cv.ShowImage('Profundidade', depth_cv)
 
 tecla = -1

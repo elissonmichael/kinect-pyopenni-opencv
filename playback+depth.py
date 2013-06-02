@@ -2,12 +2,17 @@
 from openni import *
 import cv2.cv as cv
 
+cv.NamedWindow('Video',1)
+cv.MoveWindow('Video',0,0)
+cv.NamedWindow('Profundidade',1)
+cv.MoveWindow('Profundidade',650,0)
+
 depth_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 1)
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 
 ni = Context()
 ni.init()
-ni.open_file_recording("SeuVideoAqui.oni")
+ni.open_file_recording("MeuVideo.oni")
 ni.start_generating_all()
 video = ni.find_existing_node(NODE_TYPE_IMAGE)
 depth = ni.find_existing_node(NODE_TYPE_DEPTH)

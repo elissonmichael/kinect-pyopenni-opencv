@@ -6,7 +6,7 @@ imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 
 ni = Context()
 ni.init()
-ni.open_file_recording("SeuVideoAqui.oni")
+ni.open_file_recording("MeuVideo.oni")
 ni.start_generating_all()
 video = ni.find_existing_node(NODE_TYPE_IMAGE)
 
