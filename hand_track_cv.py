@@ -12,7 +12,7 @@ imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 
 ni = Context()
 ni.init()
-ni.open_file_recording("MeuVideo.oni")
+ni.open_file_recording("HandTrack.oni")
 video = ni.find_existing_node(NODE_TYPE_IMAGE)
 depth = ni.find_existing_node(NODE_TYPE_DEPTH)
 
@@ -36,7 +36,8 @@ def create(src, id, pos, time):
 
 def update(src, id, pos, time):
     global centro
-    centro = (int(pos[0]), int(pos[1]))
+    ponto = depth.to_projective([pos])
+    centro = (int(ponto[0][0]), int(ponto[0][1])) 
 
 def destroy(src, id, time):
     return
