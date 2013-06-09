@@ -10,8 +10,9 @@ cv.MoveWindow('Quadro',720,0)
 
 fonte_do_texto = cv.InitFont(cv.CV_FONT_HERSHEY_SIMPLEX, 0.6, 0.6, 0, 1, 4)
 
-quadro = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 1)
-cv.Set(quadro, 255.0)
+quadro = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
+cv.Set(quadro, (255.0,255.0,255.0))
+
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 maos = {}
 traduz = {'Wave' : 'Apagador', 'Click' : 'Caneta'}
@@ -27,7 +28,6 @@ gesture_generator = GestureGenerator()
 gesture_generator.create(ni)
 gesture_generator.add_gesture('Wave')
 gesture_generator.add_gesture('Click')
-
 
 hands_generator = HandsGenerator()
 hands_generator.create(ni)
@@ -73,15 +73,18 @@ def processa_frame(imagem):
     cv.PutText(imagem_cv, 'Efeito: '+efeito, (10,20) ,fonte_do_texto , cv.CV_RGB(200,0,0))
     cv.ShowImage('Video', imagem_cv)
 
+
 def altera_quadro():
+    blink = cv.CloneImage(quadro)
     if maos:
       for id in maos:
+        cv.Circle(blink, maos[id]['atual'], 10, cv.CV_RGB(0, 0, 150), -1, cv.CV_AA, 0)
         if 'anterior' in maos[id]:
           if efeito == 'Caneta':
             cv.Line(quadro, maos[id]['anterior'], maos[id]['atual'], cv.CV_RGB(0,0,0), 1, cv.CV_AA, 0) 
           elif efeito == 'Apagador':
             cv.Line(quadro, maos[id]['anterior'], maos[id]['atual'], cv.CV_RGB(255,255,255), 30, cv.CV_AA, 0) 
-    cv.ShowImage('Quadro', quadro)
+    cv.ShowImage('Quadro', blink)
 
 tecla = -1
 while (tecla < 0):
