@@ -15,15 +15,10 @@ imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 maos = {}
 
 ni = Context()
-ni.init()
-video = ImageGenerator()
-video.create(ni)
-video.set_resolution_preset(RES_VGA)
-video.fps = 30
-depth = DepthGenerator()
-depth.create(ni)
-depth.set_resolution_preset(RES_VGA)
-depth.fps = 30
+ni.init_from_xml_file("OpenniConfig.xml")
+
+depth = ni.find_existing_node(NODE_TYPE_DEPTH)
+video = ni.find_existing_node(NODE_TYPE_IMAGE)
 
 gesture_generator = GestureGenerator()
 gesture_generator.create(ni)
