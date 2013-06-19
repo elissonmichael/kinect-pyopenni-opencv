@@ -7,6 +7,7 @@ pose_to_use = 'Psi'
 
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 imagem_binaria = cv.CreateImage((640,480), 8, 1)
+cv.SetZero(imagem_binaria)
 cv.NamedWindow('Video',1)
 cv.MoveWindow('Video',0,0)
 cv.NamedWindow('Binária',1)
@@ -25,10 +26,8 @@ user.create(ctx)
 skel_cap = user.skeleton_cap
 pose_cap = user.pose_detection_cap
 
-# Declare the callbacks
 def new_user(src, id):
     print "1/4 User {} detected. Looking for pose..." .format(id)
-
     pose_cap.start_detection(pose_to_use, id)
 
 def pose_detected(src, pose, id):
@@ -62,19 +61,29 @@ skel_cap.set_profile(SKEL_PROFILE_ALL)
 # Start generating
 ctx.start_generating_all()
 
-
 def processa_frame(imagem):
     cv.SetData(imagem_cv, imagem)
     cv.ShowImage('Video', imagem_cv)
 
+def processa_contorno():
+    if user.users != []:
+      contorno = user.get_user_pixels(user.users[0])
+      h = imagem_binaria.height
+      w = imagem_binaria.width
+      for i in xrange(h):
+        for j in xrange(w):
+          if contorno[j + i*w] == 1:
+            imagem_binaria[i,j] = 255
+          else:
+            imagem_binaria[i,j] = 0
+    cv.ShowImage('Binária', imagem_binaria)
+
 tecla = -1
 while (tecla < 0):
-    ctx.wait_one_update_all(video)
+    ctx.wait_one_update_all(depth)
     imagem = video.get_raw_image_map_bgr()
     processa_frame(imagem)
-    #cv.ShowImage('Binária', imagem_binaria)
-
-    # Extract head position of each tracked user
+    processa_contorno()
     for id in user.users:
         if skel_cap.is_tracking(id):
             head = skel_cap.get_joint_position(id, SKEL_HEAD)
