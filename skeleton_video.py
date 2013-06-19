@@ -1,13 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*- 
 from openni import *
-import cv2.cv as cv
+from cv2 import *
+import numpy as np
+
+joints = (SKEL_HEAD, SKEL_LEFT_ELBOW, SKEL_LEFT_FOOT, SKEL_LEFT_HAND, SKEL_LEFT_HIP, SKEL_LEFT_KNEE, SKEL_LEFT_SHOULDER, SKEL_NECK, SKEL_RIGHT_ELBOW, SKEL_RIGHT_FOOT, SKEL_RIGHT_HAND, SKEL_RIGHT_HIP, SKEL_RIGHT_KNEE, SKEL_RIGHT_SHOULDER, SKEL_TORSO)
+# SKEL_LEFT_ANKLE, SKEL_LEFT_COLLAR, SKEL_LEFT_FINGERTIP, SKEL_LEFT_WRIST, SKEL_RIGHT_ANKLE, SKEL_RIGHT_COLLAR, SKEL_RIGHT_FINGERTIP, SKEL_RIGHT_WRIST, SKEL_WAIST
 
 pose_to_use = 'Psi'
 
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
-imagem_binaria = cv.CreateImage((640,480), 8, 1)
-cv.SetZero(imagem_binaria)
+imagem_binaria = np.zeros((480,640))
+
+fonte_do_texto = cv.InitFont(cv.CV_FONT_HERSHEY_SIMPLEX, 0.7, 0.7, 0, 1, 4)
+
 cv.NamedWindow('Video',1)
 cv.MoveWindow('Video',0,0)
 cv.NamedWindow('Binária',1)
@@ -61,32 +67,32 @@ skel_cap.set_profile(SKEL_PROFILE_ALL)
 # Start generating
 ctx.start_generating_all()
 
-def processa_frame(imagem):
-    cv.SetData(imagem_cv, imagem)
-    cv.ShowImage('Video', imagem_cv)
-
-def processa_contorno():
-    if user.users != []:
-      contorno = user.get_user_pixels(user.users[0])
-      h = imagem_binaria.height
-      w = imagem_binaria.width
-      for i in xrange(h):
-        for j in xrange(w):
-          if contorno[j + i*w] == 1:
-            imagem_binaria[i,j] = 255
-          else:
-            imagem_binaria[i,j] = 0
-    cv.ShowImage('Binária', imagem_binaria)
-
 tecla = -1
 while (tecla < 0):
     ctx.wait_one_update_all(depth)
     imagem = video.get_raw_image_map_bgr()
-    processa_frame(imagem)
-    processa_contorno()
-    for id in user.users:
-        if skel_cap.is_tracking(id):
-            head = skel_cap.get_joint_position(id, SKEL_HEAD)
-            print "  {}: head at ({loc[0]}, {loc[1]}, {loc[2]}) [{conf}]" .format(id, loc=head.point, conf=head.confidence)
+    cv.SetData(imagem_cv, imagem)
+
+    if user.users != []:
+      id = user.users[0]
+      #contorno = user.get_user_pixels(id)
+      #for i in xrange(480):
+      #  for j in xrange(640):
+      #    if contorno[j + i*640] == 1:
+      #      imagem_binaria[i,j] = 255
+      #    else:
+      #      imagem_binaria[i,j] = 0
+      points = []
+      if skel_cap.is_tracking(id):
+          for joint in joints:
+            points.append(skel_cap.get_joint_position(id, joint).point)
+
+      points = depth.to_projective(points)
+      for point in points:
+        cv.Circle(imagem_cv, (int(point[0]),int(point[1])), 6, cv.CV_RGB(0, 0, 100), -1, cv.CV_AA, 0)
+
+    cv.ShowImage('Video', imagem_cv)
+
+    imshow('Binária',imagem_binaria)
     tecla = cv.WaitKey(1)
 cv.DestroyAllWindows()
