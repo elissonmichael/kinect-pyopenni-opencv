@@ -5,7 +5,7 @@ from cv2 import *
 import numpy as np
 from scipy import weave
 
-membros = {'Tronco' : (SKEL_HEAD, SKEL_NECK, SKEL_TORSO), 'Bracos' : (SKEL_LEFT_HAND, SKEL_LEFT_ELBOW, SKEL_LEFT_SHOULDER, SKEL_RIGHT_SHOULDER, SKEL_RIGHT_ELBOW, SKEL_RIGHT_HAND), 'Perna Direita' : (SKEL_RIGHT_HIP, SKEL_RIGHT_KNEE, SKEL_RIGHT_FOOT), 'Perna Esquerda' : (SKEL_LEFT_HIP, SKEL_LEFT_KNEE, SKEL_LEFT_FOOT)}
+membros = {'Tronco' : (SKEL_HEAD, SKEL_NECK, SKEL_TORSO), 'Bracos' : (SKEL_LEFT_HAND, SKEL_LEFT_ELBOW, SKEL_LEFT_SHOULDER, SKEL_RIGHT_SHOULDER, SKEL_RIGHT_ELBOW, SKEL_RIGHT_HAND), 'Pernas' : (SKEL_RIGHT_FOOT, SKEL_RIGHT_KNEE, SKEL_RIGHT_HIP, SKEL_TORSO, SKEL_LEFT_HIP, SKEL_LEFT_KNEE, SKEL_LEFT_FOOT)}
 
 # Pontos que não funcionaram
 # SKEL_LEFT_ANKLE, SKEL_LEFT_COLLAR, SKEL_LEFT_FINGERTIP, SKEL_LEFT_WRIST, SKEL_RIGHT_ANKLE, SKEL_RIGHT_COLLAR, SKEL_RIGHT_FINGERTIP, SKEL_RIGHT_WRIST, SKEL_WAIST
@@ -15,15 +15,15 @@ pose_to_use = 'Psi'
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 branca = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 cv.Set(branca, (255,255,255))
-imagem_binaria = np.zeros((480,640))
+#imagem_binaria = np.zeros((480,640))
 
 fonte_do_texto = cv.InitFont(cv.CV_FONT_HERSHEY_SIMPLEX, 0.7, 0.7, 0, 1, 4)
 cv.NamedWindow('Video',1)
-cv.NamedWindow('Binária',1)
+#cv.NamedWindow('Binária',1)
 cv.NamedWindow('Esqueleto',1)
 
 cv.MoveWindow('Video',0,0)
-cv.MoveWindow('Binária',640,0)
+#cv.MoveWindow('Binária',640,0)
 cv.MoveWindow('Esqueleto',1280,0)
 
 ctx = Context()
@@ -105,7 +105,7 @@ while (tecla < 0):
     if user.users != []:
       id = user.users[0]
       contorno = user.get_user_pixels(id)
-      c_tuple_to_image(contorno, imagem_binaria)
+      #c_tuple_to_image(contorno, imagem_binaria)
       #for i in xrange(480):
       #  for j in xrange(640):
       #    if contorno[j + i*640] == 1:
@@ -125,9 +125,9 @@ while (tecla < 0):
               cv.Circle(esqueleto, (int(points[membro][i][0]),int(points[membro][i][1])), 6, cv.CV_RGB(0, 0, 100), -1, cv.CV_AA, 0)
               if i+1 < len(points[membro]):
                 cv.Line(esqueleto, (int(points[membro][i][0]),int(points[membro][i][1])), (int(points[membro][i+1][0]),int(points[membro][i+1][1])), cv.CV_RGB(0,0,0), 1, cv.CV_AA, 0) 
-
+      #print points
     cv.ShowImage('Video', imagem_cv)
     cv.ShowImage('Esqueleto', esqueleto)
-    imshow('Binária',imagem_binaria)
+    #imshow('Binária',imagem_binaria)
     tecla = cv.WaitKey(1)
 cv.DestroyAllWindows()
