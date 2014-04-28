@@ -90,13 +90,21 @@ hands_generator.register_hand_cb(create, update, destroy)
 def processa_frame(imagem):
     cv.SetData(imagem_cv, imagem)
     if hands:
+      if hands[1]['drawing']:
+        update_notification('Click to Stop Drawing')
+      else:
+        update_notification('Click to Start Drawing')
+
       for id in hands:
         cv.PutText(imagem_cv, hands[id]['color']['name'], hands[id]['atual'] ,fonte_do_texto , cv.CV_RGB(255,255,255))
     else:
-      cv.PutText(imagem_cv, 'Wave to Start', (100,100) ,fonte_do_texto , cv.CV_RGB(255,255,255))
+      update_notification('Wave to Interact')
     for button in buttons:
       cv.Rectangle(imagem_cv, buttons[button]['start'], buttons[button]['end'] , buttons[button]['color'], -1, cv.CV_AA, 0)
     cv.ShowImage('Video', imagem_cv)
+
+def update_notification(text):
+    cv.PutText(imagem_cv, text, (240,30) ,fonte_do_texto , cv.CV_RGB(255,255,255))
 
 def altera_quadro():
     blink = cv.CloneImage(quadro)
