@@ -16,15 +16,17 @@ cv.Set(quadro, (255.0,255.0,255.0))
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 hands = {}
 buttons_size = (100, 60)
-buttons = {'White': {'color': cv.CV_RGB(255,255,255), 'start': (200, 230), 'end': (200 + buttons_size[0], 230 + buttons_size[1])},
-          'Black': {'color': cv.CV_RGB(0,0,0), 'start': (400, 230), 'end': (400 + buttons_size[0], 230 + buttons_size[1])}
+buttons = {'White': {'color': cv.CV_RGB(255,255,255), 'start': (30, 30), 'end': (30 + buttons_size[0], 30 + buttons_size[1])},
+          'Black': {'color': cv.CV_RGB(0,0,0), 'start': (30, 100), 'end': (30 + buttons_size[0], 100 + buttons_size[1])},
+          'Red': {'color': cv.CV_RGB(255,0,0), 'start': (30, 170), 'end': (30 + buttons_size[0], 170 + buttons_size[1])},
+          'Green': {'color': cv.CV_RGB(0,255,0), 'start': (30, 240), 'end': (30 + buttons_size[0], 240 + buttons_size[1])},
+          'Blue': {'color': cv.CV_RGB(0,0,255), 'start': (30, 310), 'end': (30 + buttons_size[0], 310 + buttons_size[1])},
           }
 
 color = 'Choose a color'
 
 ni = Context()
-ni.init()
-ni.open_file_recording("paola.oni")
+ni.init_from_xml_file("OpenniConfig.xml")
 video = ni.find_existing_node(NODE_TYPE_IMAGE)
 depth = ni.find_existing_node(NODE_TYPE_DEPTH)
 
