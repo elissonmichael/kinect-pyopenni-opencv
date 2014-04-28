@@ -43,10 +43,26 @@ def translate_coordinates(openni_point):
   return (int(opencv_point[0][0]), int(opencv_point[0][1]))
 
 def overlap(point, button):
-  pass
+  global buttons
+  return point[0] >= buttons[button]['start'][0] and point[0] <= buttons[button]['end'][0] and point[1] >= buttons[button]['start'][1] and point[1] <= buttons[button]['end'][1]
 
 def gesture_detected(src, gesture, id, end_point):
-    global hands
+    global hands, buttons
+
+    if gesture == 'Click':
+      no_button_clicked = True
+      for button in buttons:
+        if overlap(translate_coordinates(end_point), button):
+          for id in hands:
+            hands[id]['color']['name'] = button
+            hands[id]['color']['cv'] = buttons[button]['color']
+            hands[id]['drawing'] = False
+            no_button_clicked = False
+
+      if no_button_clicked:
+        for id in hands:
+          hands[id]['drawing'] = not hands[id]['drawing']
+
     hands_generator.start_tracking(end_point)
 
 def gesture_progress(src, gesture, point, progress): pass
@@ -55,7 +71,7 @@ def create(src, id, pos, time):
     global hands
     ponto = depth.to_projective([pos])
     centro = (int(ponto[0][0]), int(ponto[0][1])) 
-    hands[id] = {'atual': centro, 'posicao': pos, 'color': {'name': 'Choose a Color', 'cv': cv.CV_RGB(255,255,255)}}
+    hands[id] = {'atual': centro, 'posicao': pos, 'drawing': False, 'color': {'name': 'Choose a Color', 'cv': cv.CV_RGB(255,255,255)}}
 
 
 def update(src, id, pos, time):
@@ -87,8 +103,8 @@ def altera_quadro():
     if hands:
       for id in hands:
         cv.Circle(blink, hands[id]['atual'], 10, hands[id]['color']['cv'], -1, cv.CV_AA, 0)
-        if 'anterior' in hands[id]:
-          cv.Line(quadro, hands[id]['anterior'], hands[id]['atual'], hands[id]['color']['cv'], 30, cv.CV_AA, 0) 
+        if hands[id]['drawing'] == True:
+          cv.Line(quadro, hands[id]['anterior'], hands[id]['atual'], hands[id]['color']['cv'], 10, cv.CV_AA, 0) 
     cv.ShowImage('Drawing', blink)
 
 tecla = -1
