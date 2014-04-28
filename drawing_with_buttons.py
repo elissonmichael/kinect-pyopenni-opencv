@@ -16,11 +16,11 @@ cv.Set(quadro, (255.0,255.0,255.0))
 imagem_cv = cv.CreateImage((640,480), cv.IPL_DEPTH_8U, 3)
 hands = {}
 buttons_size = (100, 60)
-buttons = {'White': {'color': cv.CV_RGB(255,255,255), 'start': (30, 30), 'end': (30 + buttons_size[0], 30 + buttons_size[1])},
-          'Black': {'color': cv.CV_RGB(0,0,0), 'start': (30, 100), 'end': (30 + buttons_size[0], 100 + buttons_size[1])},
-          'Red': {'color': cv.CV_RGB(255,0,0), 'start': (30, 170), 'end': (30 + buttons_size[0], 170 + buttons_size[1])},
-          'Green': {'color': cv.CV_RGB(0,255,0), 'start': (30, 240), 'end': (30 + buttons_size[0], 240 + buttons_size[1])},
-          'Blue': {'color': cv.CV_RGB(0,0,255), 'start': (30, 310), 'end': (30 + buttons_size[0], 310 + buttons_size[1])},
+buttons = {'White': {'color': cv.CV_RGB(255,255,255), 'start': (500, 30), 'end': (500 + buttons_size[0], 30 + buttons_size[1])},
+          'Black': {'color': cv.CV_RGB(0,0,0), 'start': (500, 100), 'end': (500 + buttons_size[0], 100 + buttons_size[1])},
+          'Red': {'color': cv.CV_RGB(255,0,0), 'start': (500, 170), 'end': (500 + buttons_size[0], 170 + buttons_size[1])},
+          'Green': {'color': cv.CV_RGB(0,255,0), 'start': (500, 240), 'end': (500 + buttons_size[0], 240 + buttons_size[1])},
+          'Blue': {'color': cv.CV_RGB(0,0,255), 'start': (500, 310), 'end': (500 + buttons_size[0], 310 + buttons_size[1])},
           }
 
 color = 'Choose a color'
