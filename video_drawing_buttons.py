@@ -24,7 +24,7 @@ color = 'Choose a color'
 
 ni = Context()
 ni.init()
-ni.open_file_recording("paola.oni")
+ni.open_file_recording("paola2.oni")
 video = ni.find_existing_node(NODE_TYPE_IMAGE)
 depth = ni.find_existing_node(NODE_TYPE_DEPTH)
 
@@ -58,6 +58,7 @@ def gesture_detected(src, gesture, id, end_point):
             hands[id]['color']['cv'] = buttons[button]['color']
             hands[id]['drawing'] = False
             no_button_clicked = False
+            break
 
       if no_button_clicked:
         for id in hands:

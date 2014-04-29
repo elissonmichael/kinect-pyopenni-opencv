@@ -6,7 +6,7 @@ import cv2.cv as cv
 cv.NamedWindow('Video',1)
 cv.MoveWindow('Video',0,0)
 cv.NamedWindow('Drawing',1)
-cv.MoveWindow('Drawing',720,0)
+cv.MoveWindow('Drawing',640,0)
 
 fonte_do_texto = cv.InitFont(cv.CV_FONT_HERSHEY_SIMPLEX, 0.6, 0.6, 0, 1, 4)
 
@@ -60,7 +60,7 @@ def gesture_detected(src, gesture, id, end_point):
             hands[id]['color']['cv'] = buttons[button]['color']
             hands[id]['drawing'] = False
             no_button_clicked = False
-
+            break
       if no_button_clicked:
         for id in hands:
           hands[id]['drawing'] = not hands[id]['drawing']
@@ -92,12 +92,12 @@ hands_generator.register_hand_cb(create, update, destroy)
 def processa_frame(imagem):
     cv.SetData(imagem_cv, imagem)
     if hands:
-      if hands[1]['drawing']:
-        update_notification('Click to Stop Drawing')
-      else:
-        update_notification('Click to Start Drawing')
-
       for id in hands:
+        if hands[id]['drawing']:
+          update_notification('Click to Stop Drawing')
+        else:
+          update_notification('Click to Start Drawing')
+
         cv.PutText(imagem_cv, hands[id]['color']['name'], hands[id]['atual'] ,fonte_do_texto , cv.CV_RGB(255,255,255))
     else:
       update_notification('Wave to Interact')
