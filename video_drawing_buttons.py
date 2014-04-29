@@ -24,7 +24,7 @@ color = 'Choose a color'
 
 ni = Context()
 ni.init()
-ni.open_file_recording("paola2.oni")
+ni.open_file_recording("paola.oni")
 video = ni.find_existing_node(NODE_TYPE_IMAGE)
 depth = ni.find_existing_node(NODE_TYPE_DEPTH)
 
@@ -125,5 +125,4 @@ while (tecla < 0):
 
     tecla = cv.WaitKey(1)
 cv.DestroyAllWindows()
-
-
+cv.SaveImage("Drawing.jpg", quadro)
