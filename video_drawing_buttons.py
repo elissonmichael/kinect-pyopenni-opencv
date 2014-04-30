@@ -20,8 +20,6 @@ buttons = {'White': {'color': cv.CV_RGB(255,255,255), 'start': (200, 230), 'end'
           'Black': {'color': cv.CV_RGB(0,0,0), 'start': (400, 230), 'end': (400 + buttons_size[0], 230 + buttons_size[1])}
           }
 
-color = 'Choose a color'
-
 ni = Context()
 ni.init()
 ni.open_file_recording("paola.oni")
@@ -72,12 +70,10 @@ def create(src, id, pos, time):
     global hands
     ponto = depth.to_projective([pos])
     centro = (int(ponto[0][0]), int(ponto[0][1])) 
-    hands[id] = {'atual': centro, 'posicao': pos, 'drawing': False, 'color': {'name': 'Choose a Color', 'cv': cv.CV_RGB(255,255,255)}}
-
+    hands[id] = {'atual': centro, 'drawing': False, 'color': {'name': 'Choose a Color', 'cv': cv.CV_RGB(255,255,255)}}
 
 def update(src, id, pos, time):
     global hands
-    hands[id]['posicao'] =  pos
     hands[id]['anterior'] = hands[id]['atual']
     hands[id]['atual'] = translate_coordinates(pos)
 
